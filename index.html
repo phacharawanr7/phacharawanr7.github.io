@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>择一花</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: "Noto Serif Thai", serif;
+      background: #fafafa;
+      color: #333;
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      font-weight: normal;
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+
+    h1 span {
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    /* ดอกไม้ */
+    .flowers {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .flower-btn {
+      padding: 18px 10px;
+      border: 1px solid #e0e0e0;
+      background: white;
+      cursor: pointer;
+      font-size: 1.2rem;
+      font-family: "KaiTi", "STKaiti", serif;
+      transition: all 0.3s ease;
+    }
+
+    .flower-btn:hover {
+      border-color: #aaa;
+      transform: translateY(-2px);
+    }
+
+    /* บทกวี */
+    .poem {
+      display: none;
+      margin-top: 30px;
+      line-height: 1.9;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .poem.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .poem p {
+      margin: 8px 0;
+    }
+
+    .poem .cn {
+      color: #666;
+      font-size: 0.95rem;
+    }
+
+    /* ฝากข้อความ */
+    .leave-note {
+      margin-top: 40px;
+    }
+
+    .leave-note button {
+      background: none;
+      border: none;
+      font-size: 0.85rem;
+      color: #777;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .leave-note button:hover {
+      color: #333;
+    }
+
+    .note {
+      margin-top: 30px;
+      font-size: 0.8rem;
+      color: #777;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <h1>
+      เลือกดอกไม้หนึ่งดอก<br>
+      <span>（择一花）</span>
+    </h1>
+
+    <div class="flowers">
+      <button class="flower-btn" onclick="showPoem(0)">梅</button>
+      <button class="flower-btn" onclick="showPoem(1)">菊</button>
+      <button class="flower-btn" onclick="showPoem(2)">牡丹</button>
+      <button class="flower-btn" onclick="showPoem(3)">兰</button>
+      <button class="flower-btn" onclick="showPoem(4)">向日</button>
+      <button class="flower-btn" onclick="showPoem(5)">郁金</button>
+      <button class="flower-btn" onclick="showPoem(6)">樱</button>
+    </div>
+
+    <div id="poemBox" class="poem"></div>
+
+    <div class="leave-note">
+      <button onclick="openNote()">ถ้าอยากฝากอะไรไว้</button>
+    </div>
+
+    <div class="note">
+      ดอกไม้ไม่มีความหมายตายตัว  
+      ความหมายเกิดขึ้นตอนที่เธอเลือกมัน
+    </div>
+
+  </div>
+
+  <script>
+    const poems = [
+      {
+        th: [
+          "เราเคยเดินช่วงหนึ่งด้วยกัน",
+          "แม้ปลายทางจะไม่เหมือนกัน"
+        ],
+        cn: [
+          "我们曾并肩走过一段路",
+          "即使终点各不相同"
+        ]
+      },
+      {
+        th: [
+          "บางคน",
+          "ไม่ต้องอยู่ข้างกันนาน",
+          "แต่ทำให้เวลานั้นไม่ว่างเปล่า"
+        ],
+        cn: [
+          "有些人",
+          "不必陪伴太久",
+          "却让那段时光不再空白"
+        ]
+      },
+      {
+        th: [
+          "ชื่ออาจเลือน",
+          "แต่ภาพในวันนั้น",
+          "ยังชัด"
+        ],
+        cn: [
+          "名字或许淡去",
+          "那一天的画面",
+          "却依然清晰"
+        ]
+      },
+      {
+        th: [
+          "เราไม่จำเป็นต้องถามไถ่กันเสมอ",
+          "เพราะความเข้าใจ",
+          "เคยเกิดขึ้นแล้ว"
+        ],
+        cn: [
+          "我们不必常常问候",
+          "因为理解",
+          "早已存在过"
+        ]
+      },
+      {
+        th: [
+          "ทางแต่ละคนยาวไม่เท่ากัน",
+          "การร่วมทางช่วงสั้น",
+          "ก็เพียงพอ"
+        ],
+        cn: [
+          "每个人的路长短不同",
+          "能同行一程",
+          "已然足够"
+        ]
+      },
+      {
+        th: [
+          "สิ่งที่เคยแบ่งปัน",
+          "ไม่หายไปพร้อมกาลเวลา"
+        ],
+        cn: [
+          "曾经分享过的事物",
+          "不会随时间消散"
+        ]
+      },
+      {
+        th: [
+          "หากวันหนึ่งเรานึกถึงกัน",
+          "ขอให้นึกด้วยความอบอุ่น",
+          "ไม่ใช่คำถาม"
+        ],
+        cn: [
+          "若有一天想起彼此",
+          "愿那份想念",
+          "只有温度，没有疑问"
+        ]
+      }
+    ];
+
+    function showPoem(index) {
+      const poemBox = document.getElementById("poemBox");
+      const poem = poems[index];
+
+      let html = "";
+      poem.th.forEach(line => {
+        html += `<p>${line}</p>`;
+      });
+
+      html += "<br>";
+
+      poem.cn.forEach(line => {
+        html += `<p class="cn">${line}</p>`;
+      });
+
+      poemBox.innerHTML = html;
+      poemBox.style.display = "block";
+      poemBox.classList.remove("show");
+
+      setTimeout(() => {
+        poemBox.classList.add("show");
+      }, 50);
+    }
+
+    function openNote() {
+      alert("ข้อความของเธอ จะถูกเก็บไว้ในความทรงจำของฉัน");
+    }
+  </script>
+
+</body>
+  </html>
